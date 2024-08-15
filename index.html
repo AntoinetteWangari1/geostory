@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GeoStory: Exploring Kenya's Major Cities</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #f0f4f8;
+      color: #333;
+      font-family: 'Arial', sans-serif;
+    }
+
+    .navbar {
+      margin-bottom: 30px;
+      background-color: #2c3e50;
+    }
+
+    .navbar-brand {
+      color: #ecf0f1;
+      font-weight: bold;
+    }
+
+    .navbar-brand:hover {
+      color: #bdc3c7;
+    }
+
+    .section {
+      padding: 60px 15px;
+      margin-bottom: 30px;
+    }
+
+    .section-header {
+      font-size: 2.5rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .section-header::after {
+      content: '';
+      width: 60px;
+      height: 4px;
+      background-color: #3498db;
+      display: block;
+      margin: 10px auto 0;
+      border-radius: 2px;
+    }
+
+    .city-image {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      transition: transform 0.3s;
+    }
+
+    .city-image:hover {
+      transform: scale(1.03);
+    }
+
+    .city-description {
+      font-size: 1.1rem;
+      text-align: justify;
+    }
+
+    .map-container {
+      height: 600px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .video-container {
+      text-align: center;
+      margin-top: 40px;
+    }
+
+    .video-container video {
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      .section {
+        padding: 40px 10px;
+      }
+
+      .section-header {
+        font-size: 2rem;
+      }
+
+      .city-description {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">GeoStory: Kenya's Major Cities</a>
+  </nav>
+
+  <div class="container">
+
+    <!-- Introduction Section -->
+    <section class="section">
+      <div class="section-header">Welcome to Kenya's Urban Landscapes</div>
+      <p class="city-description text-center">
+        Kenya, a country renowned for its diverse landscapes and rich cultural heritage, is home to some of Africa's most vibrant cities. From the bustling metropolis of Nairobi to the serene shores of Kisumu, each city offers a unique blend of history, culture, and modernity. Embark on this GeoStory journey to explore the heartbeats of Kenya's urban centers.
+      </p>
+    </section>
+
+    <!-- Nairobi Section -->
+    <section class="section">
+      <div class="section-header">Nairobi - The Green City in the Sun</div>
+      <img src="nairobi.jpg" alt="Nairobi" class="city-image">
+      <p class="city-description">
+        Nairobi, the capital and largest city of Kenya, stands as the political, financial, and cultural epicenter of the nation. Often dubbed the "Green City in the Sun," Nairobi seamlessly blends natural beauty with urban development. The city is home to Nairobi National Park, a unique wildlife reserve where lions, giraffes, and zebras roam against a backdrop of skyscrapers. Beyond its natural allure, Nairobi thrives with bustling markets like Maasai Market, historic landmarks such as the Karen Blixen Museum, and a vibrant nightlife that echoes its dynamic spirit.
+      </p>
+    </section>
+
+    <!-- Mombasa Section -->
+    <section class="section">
+      <div class="section-header">Mombasa - The Coastal Paradise</div>
+      <img src="mombasa.jpg" alt="Mombasa" class="city-image">
+      <p class="city-description">
+        Mombasa, Kenya's principal coastal city, is a mosaic of cultures, reflecting influences from Africa, Arabia, Asia, and Europe. This historical city, with its labyrinthine Old Town, showcases ancient architecture, bustling spice markets, and the formidable Fort Jesus—a UNESCO World Heritage site. The city's coastline is adorned with pristine beaches like Diani and Nyali, offering turquoise waters and vibrant coral reefs, making it a haven for sun-seekers and marine enthusiasts alike.
+      </p>
+    </section>
+
+    <!-- Kisumu Section -->
+    <section class="section">
+      <div class="section-header">Kisumu - The Lakeside Jewel</div>
+      <img src="kisumu.jpg" alt="Kisumu" class="city-image">
+      <p class="city-description">
+        Perched on the shores of Lake Victoria, the world's largest tropical lake, Kisumu exudes a tranquil charm. This serene city is renowned for its breathtaking sunsets, lush wetlands, and rich Luo culture. Visitors can explore the Kisumu Impala Sanctuary, take a boat excursion to Ndere Island, or immerse themselves in local traditions at the Dunga Beach fishing village. Kisumu's vibrant markets and culinary delights, especially its fresh tilapia dishes, offer a sensory feast for travelers.
+      </p>
+    </section>
+
+    <!-- Video Section -->
+    <section class="section">
+      <div class="section-header">Experience Kenya's Cities in Motion</div>
+      <div class="video-container">
+        <video controls>
+          <source src="video.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </section>
+
+    <!-- Map Section -->
+    <section class="section">
+      <div class="section-header">Interactive Map of Featured Cities</div>
+      <div id="map" class="map-container"></div>
+    </section>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    const map = L.map('map').setView([-0.023559, 37.906193], 6);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    const cities = [
+      {
+        name: "Nairobi",
+        coordinates: [-1.286389, 36.817223],
+        image: "nairobi.jpg",
+        description: "Nairobi, the capital and largest city of Kenya, stands as the political, financial, and cultural epicenter of the nation."
+      },
+      {
+        name: "Mombasa",
+        coordinates: [-4.043477, 39.668206],
+        image: "mombasa.jpg",
+        description: "Mombasa, Kenya's principal coastal city, is a mosaic of cultures, reflecting influences from Africa, Arabia, Asia, and Europe."
+      },
+      {
+        name: "Kisumu",
+        coordinates: [-0.091702, 34.768634],
+        image: "kisumu.jpg",
+        description: "Perched on the shores of Lake Victoria, the world's largest tropical lake, Kisumu exudes a tranquil charm."
+      }
+    ];
+
+    cities.forEach(city => {
+      const marker = L.marker(city.coordinates).addTo(map);
+      marker.bindPopup(`
+        <div style="text-align:center;">
+          <h5>${city.name}</h5>
+          <img src="${city.image}" alt="${city.name}" style="width:100%;height:auto;border-radius:8px;margin-bottom:10px;">
+          <p style="font-size:0.9rem;">${city.description}</p>
+        </div>
+      `);
+    });
+  </script>
+
+</body>
+
+</html>
